@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     def apply_precision_profile(self) -> "Settings":
         profile_defaults = {
             "balanced": {
-                "chunk_size": 1200,
+                "chunk_size": 800,
                 "chunk_overlap": 150,
                 "default_top_k": 3,
                 "min_relevance_score": 0.3,
@@ -48,10 +48,10 @@ class Settings(BaseSettings):
             "max_precision": {
                 "chunk_size": 1200,
                 "chunk_overlap": 200,
-                "default_top_k": 6,
-                "min_relevance_score": 0.75,
+                "default_top_k": 8,
+                "min_relevance_score": 0.51,
                 "min_overlap_terms": 3,
-                "groq_temperature": 0.8,
+                "groq_temperature": 0.0,
             },
         }[self.precision_mode]
         explicit_fields = set(self.model_fields_set)
