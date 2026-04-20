@@ -1,0 +1,1 @@
+"""Pydantic esquemas da API."""
