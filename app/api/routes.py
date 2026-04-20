@@ -5,7 +5,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 
 from app.api.dependencies import get_container
-from app.core.settings import Settings, get_settings
+from app.models.settings import Settings, get_settings
 from app.models.domain import ConsultationRecord
 from app.schemas.api import (
     ConsultationResponse,
@@ -96,10 +96,10 @@ def query_documents(
         top_k=payload.top_k,
         document_ids=payload.documentos_ids,
     )
-    answer:str, sufficient: tuple[str, bool] = container.answer_service.compose(payload.pergunta, sources)
+    answer, sufficient = container.answer_service.compose(payload.pergunta, sources)
 
     consultation = ConsultationRecord(
-        id=str(object= uuid4()),
+        id=str(uuid4()),
         question=payload.pergunta,
         answer=answer,
         sufficient_evidence=sufficient,
