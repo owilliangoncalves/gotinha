@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gotinha</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f3f4f6;
+        color: #111827;
+      }
+
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 24px 16px 48px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      .panel {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .grow {
+        flex: 1 1 320px;
+      }
+
+      textarea,
+      input,
+      button {
+        font: inherit;
+      }
+
+      textarea,
+      input[type="number"] {
+        width: 100%;
+        border: 1px solid #9ca3af;
+        border-radius: 8px;
+        padding: 12px;
+        background: #ffffff;
+      }
+
+      textarea {
+        min-height: 130px;
+        resize: vertical;
+      }
+
+      button {
+        border: 1px solid #111827;
+        background: #111827;
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 10px 14px;
+        cursor: pointer;
+      }
+
+      button.secondary {
+        background: #ffffff;
+        color: #111827;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+
+      .muted {
+        color: #4b5563;
+      }
+
+      .status-ok {
+        color: #065f46;
+      }
+
+      .status-warn {
+        color: #92400e;
+      }
+
+      .status-error {
+        color: #991b1b;
+      }
+
+      .answer {
+        white-space: pre-wrap;
+        line-height: 1.5;
+      }
+
+      .source {
+        border-top: 1px solid #e5e7eb;
+        padding-top: 12px;
+        margin-top: 12px;
+      }
+
+      .meta {
+        font-size: 14px;
+        color: #4b5563;
+        margin-bottom: 8px;
+      }
+
+      .badge {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 12px;
+        background: #e5e7eb;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      ul {
+        padding-left: 18px;
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="panel">
+        <h1>Gotinha</h1>
+        <p class="muted">
+          Interface mínima para fazer uma pergunta e ver a resposta da IA com
+          as fontes recuperadas.
+        </p>
+        <div class="row">
+          <button id="sync-button" class="secondary" type="button">
+            Sincronizar documentos
+          </button>
+          <button id="refresh-button" class="secondary" type="button">
+            Atualizar status
+          </button>
+        </div>
+        <p id="connection-status" class="muted" style="margin-top: 12px;">
+          Verificando servidor...
+        </p>
+        <div id="documents-summary" class="muted"></div>
+        <ul id="documents-list"></ul>
+      </section>
+
+      <section class="panel">
+        <h2>Pergunta</h2>
+        <label for="question-input" class="muted">Digite a pergunta</label>
+        <textarea
+          id="question-input"
+          placeholder="Exemplo: Qual o tema principal do caderno?"
+        ></textarea>
+        <div class="row" style="margin-top: 12px;">
+          <div style="width: 120px;">
+            <label for="top-k-input" class="muted">Top K</label>
+            <input id="top-k-input" type="number" min="1" max="8" value="5" />
+          </div>
+          <div style="display: flex; align-items: end;">
+            <button id="submit-button" type="button">Perguntar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="row" style="justify-content: space-between; align-items: center;">
+          <h2 style="margin-bottom: 0;">Resposta</h2>
+          <span id="sufficiency-badge" class="badge hidden"></span>
+        </div>
+        <p id="result-status" class="muted">Nenhuma pergunta enviada ainda.</p>
+        <div id="answer-text" class="answer"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Fontes</h2>
+        <div id="sources-container" class="muted">
+          As fontes recuperadas aparecerao aqui.
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const connectionStatus = document.getElementById("connection-status");
+      const documentsSummary = document.getElementById("documents-summary");
+      const documentsList = document.getElementById("documents-list");
+      const syncButton = document.getElementById("sync-button");
+      const refreshButton = document.getElementById("refresh-button");
+      const questionInput = document.getElementById("question-input");
+      const topKInput = document.getElementById("top-k-input");
+      const submitButton = document.getElementById("submit-button");
+      const resultStatus = document.getElementById("result-status");
+      const answerText = document.getElementById("answer-text");
+      const sourcesContainer = document.getElementById("sources-container");
+      const sufficiencyBadge = document.getElementById("sufficiency-badge");
+
+      function setConnectionStatus(message, className) {
+        connectionStatus.textContent = message;
+        connectionStatus.className = className;
+      }
+
+      function renderDocuments(documents) {
+        documentsSummary.textContent =
+          documents.length === 0
+            ? "Nenhum documento carregado."
+            : `${documents.length} documento(s) carregado(s).`;
+
+        documentsList.innerHTML = "";
+
+        documents.forEach((doc) => {
+          const item = window.document.createElement("li");
+          item.textContent = `${doc.titulo} (${doc.nome_arquivo})`;
+          documentsList.appendChild(item);
+        });
+      }
+
+      function renderSources(sources) {
+        if (!sources.length) {
+          sourcesContainer.className = "muted";
+          sourcesContainer.textContent = "Nenhuma fonte retornada.";
+          return;
+        }
+
+        sourcesContainer.className = "";
+        sourcesContainer.innerHTML = "";
+
+        sources.forEach((source) => {
+          const article = window.document.createElement("article");
+          article.className = "source";
+
+          const meta = window.document.createElement("div");
+          meta.className = "meta";
+          meta.textContent =
+            `${source.documento} | pagina ${source.pagina} | secao ${
+              source.secao ?? "Nao identificada"
+            } | score ${source.score_relevancia}`;
+
+          const snippet = window.document.createElement("div");
+          snippet.className = "answer";
+          snippet.textContent = source.trecho;
+
+          article.appendChild(meta);
+          article.appendChild(snippet);
+          sourcesContainer.appendChild(article);
+        });
+      }
+
+      async function loadHealthAndDocuments() {
+        try {
+          const [healthResponse, documentsResponse] = await Promise.all([
+            fetch("/api/v1/health"),
+            fetch("/api/v1/documents"),
+          ]);
+
+          if (!healthResponse.ok || !documentsResponse.ok) {
+            throw new Error("Falha ao consultar a API.");
+          }
+
+          const health = await healthResponse.json();
+          const documents = await documentsResponse.json();
+
+          setConnectionStatus(
+            `Servidor ativo: ${health.service} ${health.version}`,
+            "status-ok",
+          );
+          renderDocuments(documents);
+        } catch (error) {
+          setConnectionStatus(
+            "Nao foi possivel conectar ao backend.",
+            "status-error",
+          );
+          documentsSummary.textContent = "";
+          documentsList.innerHTML = "";
+        }
+      }
+
+      async function syncDocuments() {
+        syncButton.disabled = true;
+        try {
+          const response = await fetch("/api/v1/documents/sync", {
+            method: "POST",
+          });
+
+          if (!response.ok) {
+            throw new Error("Falha ao sincronizar documentos.");
+          }
+
+          const payload = await response.json();
+          resultStatus.textContent =
+            `${payload.total_documentos_sincronizados} documento(s) sincronizado(s).`;
+          await loadHealthAndDocuments();
+        } catch (error) {
+          resultStatus.textContent = "Nao foi possivel sincronizar os documentos.";
+        } finally {
+          syncButton.disabled = false;
+        }
+      }
+
+      async function submitQuestion() {
+        const question = questionInput.value.trim();
+        const topK = Number(topKInput.value || "5");
+
+        if (!question) {
+          resultStatus.textContent = "Digite uma pergunta antes de enviar.";
+          answerText.textContent = "";
+          renderSources([]);
+          sufficiencyBadge.classList.add("hidden");
+          return;
+        }
+
+        submitButton.disabled = true;
+        resultStatus.textContent = "Consultando a IA...";
+        answerText.textContent = "";
+        renderSources([]);
+        sufficiencyBadge.classList.add("hidden");
+
+        try {
+          const response = await fetch("/api/v1/consultas", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              pergunta: question,
+              top_k: topK,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Falha ao consultar.");
+          }
+
+          const payload = await response.json();
+          answerText.textContent = payload.resposta;
+          resultStatus.textContent = "Resposta gerada.";
+          sufficiencyBadge.textContent = payload.suficiente
+            ? "Evidencia suficiente"
+            : "Evidencia insuficiente";
+          sufficiencyBadge.classList.remove("hidden");
+          renderSources(payload.fontes);
+        } catch (error) {
+          resultStatus.textContent =
+            "Nao foi possivel obter a resposta da IA neste momento.";
+          answerText.textContent = "";
+          renderSources([]);
+          sufficiencyBadge.classList.add("hidden");
+        } finally {
+          submitButton.disabled = false;
+        }
+      }
+
+      syncButton.addEventListener("click", syncDocuments);
+      refreshButton.addEventListener("click", loadHealthAndDocuments);
+      submitButton.addEventListener("click", submitQuestion);
+      questionInput.addEventListener("keydown", (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+          submitQuestion();
+        }
+      });
+
+      loadHealthAndDocuments();
+    </script>
+  </body>
+</html>
