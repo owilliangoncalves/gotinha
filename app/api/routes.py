@@ -10,6 +10,7 @@ from app.models.domain import ConsultationRecord
 from app.schemas.api import (
     ConsultationResponse,
     DocumentResponse,
+    DocumentSyncResponse,
     HealthResponse,
     QueryRequest,
     QueryResponse,
@@ -62,6 +63,18 @@ def list_documents(
     ]
 
 
+@router.post("/documents/sync", response_model=DocumentSyncResponse)
+def sync_documents(
+    container: ServiceContainer = Depends(get_container),
+) -> DocumentSyncResponse:
+    documents, warnings = container.library_service.sync()
+    return DocumentSyncResponse(
+        total_documentos_sincronizados=len(documents),
+        documentos=[DocumentResponse.from_record(document) for document in documents],
+        avisos=warnings,
+    )
+
+
 @router.get("/documents/{document_id}", response_model=DocumentResponse)
 def get_document(
     document_id: str,
@@ -83,10 +96,10 @@ def query_documents(
         top_k=payload.top_k,
         document_ids=payload.documentos_ids,
     )
-    answer, sufficient = container.answer_service.compose(payload.pergunta, sources)
+    answer:str, sufficient: tuple[str, bool] = container.answer_service.compose(payload.pergunta, sources)
 
     consultation = ConsultationRecord(
-        id=str(uuid4()),
+        id=str(object= uuid4()),
         question=payload.pergunta,
         answer=answer,
         sufficient_evidence=sufficient,
