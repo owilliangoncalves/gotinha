@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Python
+.pytest_cache/
+.venv/
+*.egg-info/
+__pycache__/
+
 # User-specific files
 *.rsuser
 *.suo
@@ -427,3 +433,4 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+pdf

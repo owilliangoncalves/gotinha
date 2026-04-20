@@ -1,0 +1,1 @@
+"""Gotinha application package."""
