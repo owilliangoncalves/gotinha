@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Gotinha · Pergunte. Confira. Compartilhe.{% endblock %}
+
+{% block content %}
+
+{# ================================================================== #}
+{# 01 — HERO (tinta + painel brand diagonal)                            #}
+{# ================================================================== #}
+<section class="hero grain" id="inicio" aria-labelledby="hero-title">
+    <div class="hero-illus" aria-hidden="true">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice">
+            <g fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke">
+            </g>
+        </svg>
+    </div>
+
+    <div class="hero-grid">
+        <div>
+        
+            <h1 id="hero-title" class="hero-title poster-type">
+                <span aria-hidden="true">
+                    <span class="block">Pergunte.</span>
+                    <span class="block">Confira.</span>
+                    <span class="block"><span class="accent"><span>Compartilhe.</span></span></span>
+                </span>
+            </h1>
+            
+            <div class="hero-ctas">
+                <a class="btn-poster btn-poster--ghost" href="#metodologia">Como funciona</a>
+            </div>
+            <p class="hero-doodle" aria-hidden="true">
+                <svg viewBox="0 0 120 50" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="10" cy="38" r="6"/>
+                    <path d="M20 32 C 45 6, 80 4, 110 18" stroke-dasharray="2 8"/>
+                    <path d="M98 8 L112 18 L96 28"/>
+                </svg>
+                <span>toda resposta tem fonte</span>
+            </p>
+        </div>
+        <div class="hero-mascote-wrap">
+            <img
+                class="hero-mascote"
+                src="{{ url_for('static', path='/images/gotinha-bg-preenchido.svg') }}"
+                alt=""
+                width="1536"
+                height="1536"
+                decoding="async">
+        </div>
+    </div>
+</section>
+
+{# ================================================================== #}
+{# 04 — METODOLOGIA                                                     #}
+{# ================================================================== #}
+<section class="section section--papel" id="metodologia" aria-labelledby="metodologia-title">
+    <div class="container">
+        <header class="section-header">
+            <div>
+                <p class="eyebrow-num label-type">Metodologia</p>
+                <h2 id="metodologia-title">Como o sistema <span class="scribble-underline" style="color: var(--amarelo)">responde</span>.</h2>
+            </div>
+        </header>
+
+        <ul class="metodologia" role="list">
+            <li class="passo">
+                <span class="passo-num" aria-hidden="true">01</span>
+                <h3>Pré-processamento</h3>
+                <p>Normalização da pergunta, expansão de siglas do SUS (UBS, ESF, RAS, PNAB) e detecção de intenção clínica.</p>
+            </li>
+            <li class="passo">
+                <span class="passo-num" aria-hidden="true">02</span>
+                <h3>Retrieval híbrido</h3>
+                <p>Busca BM25 (palavras-chave) e busca vetorial (pgvector) com fusão por Reciprocal Rank Fusion (RRF).</p>
+            </li>
+            <li class="passo">
+                <span class="passo-num" aria-hidden="true">03</span>
+                <h3>Reranking</h3>
+                <p>Cross-encoder reordena o top-K por relevância semântica, filtrando por vigência do documento.</p>
+            </li>
+            <li class="passo">
+                <span class="passo-num" aria-hidden="true">04</span>
+                <h3>Limiar de relevância</h3>
+                <p>Se o score ficar abaixo do limiar configurado, o gerador não é chamado — a resposta padrão é devolvida.</p>
+            </li>
+            <li class="passo">
+                <span class="passo-num" aria-hidden="true">05</span>
+                <h3>Geração grounded</h3>
+                <p>Prompt com instruções estritas: só o contexto recuperado, com citação e disclaimers, em português do Brasil.</p>
+            </li>
+            <li class="passo">
+                <span class="passo-num" aria-hidden="true">06</span>
+                <h3>Pós-validação</h3>
+                <p>Verifica se toda afirmação tem citação e se a citação existe no contexto. Falha → regenera ou devolve erro.</p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+{# ================================================================== #}
+{# 05 — FONTES / DADOS                                                  #}
+{# ================================================================== #}
+<section class="section section--tinta grain" id="fontes" aria-labelledby="fontes-title">
+    <div class="container">
+        <header class="section-header">
+            <div>
+                <p class="eyebrow-num label-type">Fontes</p>
+                <h2 id="fontes-title">Toda informação <span class="scribble-underline" style="color: var(--verde)">tem fonte</span>.</h2>
+            </div>
+        </header>
+
+        <ul class="dados" role="list">
+            <li class="dado">
+                <p class="dado-num">128</p>
+                <h3 class="dado-titulo">Documentos oficiais</h3>
+                <p class="dado-sub">PCDT, cadernos, notas técnicas e portarias vigentes na base.</p>
+                <p class="dado-como">
+                    <strong>Como o dado é produzido</strong>
+                    Indexação periódica dos documentos publicados pelo Ministério da Saúde, com metadados de vigência e revogação.
+                </p>
+                <p class="dado-fonte">
+                    <strong>Fonte</strong>
+                    <a href="https://bvsms.saude.gov.br/" target="_blank" rel="noopener noreferrer">BVS / Ministério da Saúde (abre em nova aba) ↗</a>
+                </p>
+            </li>
+            <li class="dado">
+                <p class="dado-num">100%</p>
+                <h3 class="dado-titulo">Citações obrigatórias</h3>
+                <p class="dado-sub">Toda afirmação é amarrada a um documento, seção e, quando existe, página.</p>
+                <p class="dado-como">
+                    <strong>Como o dado é produzido</strong>
+                    Pós-validação automática: resposta sem fonte é bloqueada antes de chegar ao profissional.
+                </p>
+                <p class="dado-fonte">
+                    <strong>Fonte</strong>
+                    <a href="#metodologia">Pipeline e pós-validação (ver Metodologia) ↗</a>
+                </p>
+            </li>
+            <li class="dado">
+                <p class="dado-num">0</p>
+                <h3 class="dado-titulo">Busca na internet</h3>
+                <p class="dado-sub">Sem fallback para a web, APIs externas ou conhecimento paramétrico do modelo.</p>
+                <p class="dado-como">
+                    <strong>Como o dado é produzido</strong>
+                    Escopo fechado por design: o gerador só vê os trechos recuperados; nunca consulta a internet.
+                </p>
+                <p class="dado-fonte">
+                    <strong>Fonte</strong>
+                    <a href="https://www.gov.br/saude/pt-br/composicao/sectics" target="_blank" rel="noopener noreferrer">Ministério da Saúde (abre em nova aba) ↗</a>
+                </p>
+            </li>
+            <li class="dado">
+                <p class="dado-num">LGPD</p>
+                <h3 class="dado-titulo">Por design</h3>
+                <p class="dado-sub">Logs anonimizados, perguntas com dados sensíveis tratadas com cuidado.</p>
+                <p class="dado-como">
+                    <strong>Como o dado é produzido</strong>
+                    Camada de observabilidade remove identificadores antes de qualquer persistência.
+                </p>
+                <p class="dado-fonte">
+                    <strong>Fonte</strong>
+                    <a href="#privacidade">Política de privacidade e LGPD (ver rodapé) ↗</a>
+                </p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+{% endblock %}
+

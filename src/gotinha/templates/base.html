@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Gotinha — busca assistida por IA na documentação oficial do SUS. Toda resposta vem com citação de fonte.">
+    <title>Gotinha — página inicial</title>
+
+    {# Ícones: conjunto real em /static/favicon #}
+    <link rel="icon" href="{{ url_for('static', path='favicon/favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', path='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', path='favicon/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', path='favicon/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', path='favicon/site.webmanifest') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800;900&display=swap">
+
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}?v=3">
+
+</head>
+<body>
+
+    <header class="header" role="banner">
+        <div class="header-inner">
+            <a href="/" class="brand" aria-label="Gotinha — página inicial">
+                <span class="brand-name">Gotinha</span>
+            </a>
+
+            <nav class="nav" role="navigation" aria-label="Navegação principal">
+                <ol class="nav-list">
+                    <li><a class="nav-link" href="#metodologia">Metodologia</a></li>
+                    <li><a class="nav-link" href="#fontes">Fontes</a></li>
+                </ol>
+            </nav>
+
+            <div class="header-actions">
+                <button class="menu-toggle" type="button" id="menuToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="mobile-nav" id="mobileNav" aria-label="Navegação móvel" hidden>
+        <ol class="mobile-nav-list">
+            <li><a class="mobile-nav-link" href="#metodologia">Metodologia</a></li>
+            <li><a class="mobile-nav-link" href="#fontes">Fontes</a></li>
+        </ol>
+    </nav>
+
+    <main id="conteudo" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Gotinha</h3>
+                <p>Busca assistida por IA na documentação oficial do SUS. Toda resposta vem com citação de fonte.</p>
+            </div>
+            <nav aria-label="Recursos">
+                <span class="footer-h4">Recursos</span>
+                <ul class="footer-list">
+                    <li><a href="#temas">Temas da base</a></li>
+                    <li><a href="#metodologia">Como funciona</a></li>
+                    <li><a href="https://bvsms.saude.gov.br/" target="_blank" rel="noopener noreferrer">BVS / Ministério da Saúde</a></li>
+                </ul>
+            </nav>
+            <nav aria-label="Informações">
+                <span class="footer-h4">Informações</span>
+                <ul class="footer-list">
+                    <li><a href="#fontes">Base e fontes</a></li>
+                    <li><a href="#privacidade">Privacidade e LGPD</a></li>
+                    <li><a href="#acessibilidade">Acessibilidade</a></li>
+                    <li><a href="https://github.com/" target="_blank" rel="noopener noreferrer">Código fonte</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <p><strong>Aviso:</strong> este sistema informa o que a documentação oficial diz e não substitui julgamento clínico. Consulte sempre a referência oficial vigente.</p>
+            <p class="footer-meta">Versão {{ '%s' | strftime('%Y') }}</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', path='app.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
