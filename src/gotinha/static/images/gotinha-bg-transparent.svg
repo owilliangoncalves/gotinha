@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1536" viewBox="0 0 1536 1536" role="img" aria-labelledby="titulo descricao">
+  <title id="titulo">Gotinha — redesenho vetorial com fundo transparente</title>
+  <desc id="descricao">Mascote em forma de gota, sorrindo e fazendo sinal de positivo, com lenço azul e marca SUS. Contornos regulares, cores suaves e textura procedural. Recriação aproximada da referência.</desc>
+
+  <!-- CORES: contorno #151313; creme #f5eedf; sombra #aed6d8;
+       azul #168ec3. -->
+  <defs>
+    <linearGradient id="tecido-azul" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#32b5dc"/>
+      <stop offset="0.55" stop-color="#148fc5"/>
+      <stop offset="1" stop-color="#17619a"/>
+    </linearGradient>
+    <linearGradient id="iris-azul" x1="0" y1="0" x2="0.25" y2="1">
+      <stop stop-color="#151313"/>
+      <stop offset="0.65" stop-color="#185986"/>
+      <stop offset="1" stop-color="#13a2d2"/>
+    </linearGradient>
+    <!-- Texture confined to the painted shapes: no background rectangle. -->
+    <filter id="grao-papel" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="12" result="ruido"/>
+      <feColorMatrix in="ruido" type="saturate" values="0" result="grao"/>
+      <feBlend in="SourceGraphic" in2="grao" mode="soft-light" result="texturizado"/>
+      <feComposite in="texturizado" in2="SourceGraphic" operator="in"/>
+    </filter>
+    <pattern id="reticula" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(15)">
+      <circle cx="2" cy="2" r="1.35" fill="#f5eedf" opacity="0.75"/>
+    </pattern>
+    <clipPath id="limite-circulo">
+      <circle cx="790" cy="879" r="507"/>
+    </clipPath>
+    <path id="forma-gota" d="M 940,207 C 858,246 765,310 674,386 C 573,471 488,577 478,696 C 464,845 547,957 673,1005 C 711,1020 730,1037 742,1049 C 767,1026 796,1016 833,1006 C 1001,964 1109,886 1110,733 C 1111,615 1034,512 983,411 C 946,338 927,290 946,219 Q 951,203 940,207 Z"/>
+    <clipPath id="limite-cabeca">
+      <use href="#forma-gota"/>
+    </clipPath>
+    <!-- Outer shadow follows the head exactly; the inner edge is a smooth curve. -->
+    <path id="forma-sombra-cabeca" d="M935 320 C946 352 962 381 983 411 C1034 512 1111 615 1110 733 C1109 886 1001 964 833 1006 C796 1016 767 1026 742 1049 C730 1037 711 1020 673 1005 C547 957 464 845 478 696 C481 735 490 768 508 794 C587 939 703 991 849 959 C982 931 1080 807 1040 641 C1011 521 945 423 935 320Z"/>
+  </defs>
+
+  <g id="mascote" stroke="#151313" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 02 · Rear scarf tails are clipped neatly to the circular badge. -->
+    <g id="lenco-atras" clip-path="url(#limite-circulo)">
+      <path d="M455 1020 C559 971 674 988 740 1058 C911 965 1020 865 1113 902 C1191 925 1220 976 1294 991 L1290 1218 C1211 1257 1175 1110 1047 1061 C919 1037 818 1138 716 1110 L519 1282 C473 1216 453 1113 455 1020Z" fill="#194e7d"/>
+      <path d="M757 1058 C903 1005 1037 863 1131 916 C1195 947 1217 980 1294 996 L1280 1053 C1156 985 1070 973 965 1013 L782 1093Z" fill="url(#tecido-azul)"/>
+      <path d="M990 952 Q1060 929 1107 941 M1145 956 1227 976 M483 1091 Q485 1192 514 1252" fill="none" stroke="#63c6dd" stroke-width="10"/>
+      <path d="M1103 1044 C1190 1074 1214 1120 1259 1165 L1204 1252 1057 1122Z" fill="url(#reticula)" opacity="0.45" stroke="none"/>
+    </g>
+
+    <!-- 03 · Torso and arms, with smooth continuous outlines. -->
+    <g id="corpo">
+      <!-- Smooth lower torso outline; no surrounding badge or background. -->
+      <path d="M570 975 C537 968 498 982 467 1000 L347 1031 C342 1099 395 1148 454 1148 L540 1137 L520 1308.125 A507 507 0 0 0 1168 1216.883 C1207 1174 1164 1100 1098 1050 L1015 1004 C944 1007 856 1044 780 1078 C682 1059 632 1001 570 975Z" fill="#f5eedf"/>
+      <path d="M358 1064 Q389 1138 457 1137 L540 1129 560 1073 Q498 1129 449 1091Z M948 1107 C980 1111 1013 1133 1048 1144 L1109 1133 Q1065 1154 1037 1177 L974 1148 975 1217 944 1232Z M550 1209 544 1300 587 1320Z" fill="#aed6d8" stroke="none"/>
+      <!-- Left arm shadow follows the new lower silhouette, without a floating strip. -->
+      <path id="sombra-braco-esquerdo" d="M1159 1127 C1174 1150 1183 1184 1168 1216.883 A507 507 0 0 1 944 1362.045 L943 1339 C1013 1310 1090 1267 1133 1226 C1173 1188 1168 1156 1159 1127Z" fill="#aed6d8" stroke="none"/>
+      <path d="M358 1064 Q389 1138 457 1137 L540 1129 560 1073 Q498 1129 449 1091Z M948 1107 C980 1111 1013 1133 1048 1144 L1109 1133 1037 1177 974 1148 975 1217 944 1232Z M550 1209 544 1300 587 1320Z" fill="url(#reticula)" stroke="none"/>
+      <path d="M540 1137 575 1049 M474 998 Q491 1020 495 1049 M977 1147 991 1225 M1100 1137 Q1055 1145 1028 1204 M1028 1204 Q1053 1206 1068 1222 M991 1225 Q1012 1208 1033 1218 M944 1362.045 C925 1340 926 1300 949 1274 C967 1255 999 1225 1018 1228 M944 1362.045 Q944 1325 964 1302" fill="none"/>
+    </g>
+
+    <!-- 04 · Head; a single closed Bézier outline, not an automatic trace. -->
+    <g id="cabeca">
+      <use href="#forma-gota" fill="#f5eedf"/>
+      <g id="sombra-cabeca" clip-path="url(#limite-cabeca)" stroke="none">
+        <use href="#forma-sombra-cabeca" fill="#aed6d8"/>
+        <use href="#forma-sombra-cabeca" fill="url(#reticula)"/>
+      </g>
+      <use href="#forma-gota" fill="none"/>
+    </g>
+
+    <!-- 05 · Brows, eyes and highlights, each independently editable. -->
+    <g id="rosto" stroke="none">
+      <g id="sobrancelhas" fill="#151313">
+        <path d="M634 515 C651 488 681 477 707 489 C721 495 723 508 707 505 C678 497 657 505 638 519 Q630 524 634 515Z"/>
+        <path d="M885 515 C912 500 943 520 959 544 Q966 559 952 549 C933 532 914 525 891 528 Q875 530 885 515Z"/>
+      </g>
+      <g id="olho-esquerdo">
+        <path d="M628 662 C611 617 637 563 668 563 C703 561 724 606 712 655Z" fill="#aed6d8"/>
+        <path d="M628 667 C612 623 639 574 670 574 C701 575 722 613 711 656 C709 619 690 584 667 584 C641 585 625 626 628 667Z" fill="#151313"/>
+        <ellipse cx="677" cy="644" rx="35" ry="50" transform="rotate(8 677 644)" fill="url(#iris-azul)" stroke="#151313" stroke-width="7"/>
+        <ellipse cx="677" cy="633" rx="24" ry="37" fill="#151313"/>
+        <ellipse cx="668" cy="618" rx="10" ry="13" fill="#fff8e9"/>
+        <path d="M656 652 Q671 691 696 662 Q684 705 661 681Z" fill="#158fbe" opacity="0.8"/>
+        <path d="M602 672 Q634 674 667 696" fill="none" stroke="#151313" stroke-width="5"/>
+      </g>
+      <g id="olho-direito">
+        <path d="M857 680 C846 626 867 585 899 588 C938 588 961 643 940 693Z" fill="#aed6d8"/>
+        <path d="M856 682 C847 640 870 597 898 598 C930 599 955 644 940 693 C942 650 921 609 898 608 C871 606 857 645 856 682Z" fill="#151313"/>
+        <ellipse cx="890" cy="667" rx="33" ry="49" transform="rotate(5 890 667)" fill="url(#iris-azul)" stroke="#151313" stroke-width="7"/>
+        <ellipse cx="891" cy="657" rx="23" ry="36" fill="#151313"/>
+        <ellipse cx="882" cy="642" rx="10" ry="12" fill="#fff8e9"/>
+        <path d="M871 681 Q887 715 909 688 Q897 724 875 703Z" fill="#158fbe"/>
+        <path d="m901 696 6-8 5 5-6 9Z" fill="#fff8e9"/>
+        <path d="M894 722 Q928 700 963 707" fill="none" stroke="#151313" stroke-width="5"/>
+      </g>
+
+      <!-- Mouth interior and tongue are bounded by the smile silhouette. -->
+      <g id="sorriso">
+        <path d="M628 766 Q621 729 659 727 L679 733 Q648 742 628 766Z M877 754 Q922 743 923 798 Q904 771 877 754Z" fill="#aed6d8"/>
+        <path d="M650 744 C710 802 832 814 901 771 C870 846 827 891 775 885 C714 883 678 825 650 744Z" fill="#151313" stroke="#151313" stroke-width="6"/>
+        <path d="M712 853 Q745 825 777 837 L760 855 Q800 820 840 852 Q781 908 721 864Z" fill="#ed5d61"/>
+        <path d="M654 745 C717 801 830 810 896 772" fill="none" stroke="#aed6d8" stroke-width="7"/>
+        <path d="M634 759 Q642 743 663 739 M886 760 Q905 763 914 783" fill="none" stroke="#151313" stroke-width="6"/>
+        <path d="M720 893 Q766 918 809 901 Q767 941 720 893Z" fill="#aed6d8"/>
+      </g>
+    </g>
+
+    <!-- 06 · Front scarf and knot. -->
+    <g id="lenco-frente">
+      <path d="M475 982 C484 938 525 927 570 943 C613 972 656 1011 717 1035 L708 1075 C622 1053 586 1003 536 981 Q503 968 475 982Z" fill="url(#tecido-azul)"/>
+      <path d="M496 970 Q524 941 562 968 L642 1022 M565 949 Q631 1012 698 1039" fill="none" stroke="#70cbdc" stroke-width="8"/>
+      <path d="M774 1040 C870 1008 956 970 1024 955 C1082 942 1129 945 1182 962 C1080 950 1031 980 952 1002 L777 1074Z" fill="url(#tecido-azul)"/>
+      <path d="M800 1053 Q954 1000 1038 988" fill="none" stroke="#55c1d8" stroke-width="7"/>
+      <path d="M712 1071 C650 1074 615 1121 623 1171 C680 1169 720 1138 726 1092Z" fill="url(#tecido-azul)"/>
+      <path d="M760 1091 C759 1133 794 1166 842 1175 C852 1129 814 1081 774 1072Z" fill="url(#tecido-azul)"/>
+      <path d="M702 1092 Q659 1117 641 1152 M778 1099 Q806 1118 825 1153" fill="none" stroke="#69c8dc" stroke-width="7"/>
+      <path d="M694 1101 658 1133 681 1100Z M785 1103 813 1136 800 1110Z" fill="#151313" stroke="none"/>
+      <path d="M743 1030 C725 1014 706 1025 701 1045 C694 1066 704 1094 721 1097 Q731 1099 737 1091 C754 1106 771 1092 774 1068 C779 1045 770 1021 751 1029Z" fill="url(#tecido-azul)"/>
+      <path d="M735 1033 Q714 1056 728 1085 M755 1039 Q743 1050 742 1073" fill="none" stroke="#71cede" stroke-width="8"/>
+    </g>
+
+    <!-- 07 · Raised thumb and fingers. -->
+    <g id="mao-positivo">
+      <path d="M359 820 C380 785 347 731 372 707 C391 688 420 704 431 729 C446 762 433 790 438 815 C478 830 485 857 467 879 C488 894 486 922 466 938 C480 957 469 981 459 988 C476 1032 444 1073 403 1078 C345 1085 317 1028 310 967 C298 897 311 842 359 820Z" fill="#f5eedf"/>
+      <path d="M375 739 Q383 786 411 778 Q430 768 426 738 L433 811 366 813Z M339 989 Q352 1031 404 1021 L441 1006 Q432 1049 397 1045 Q365 1045 350 1030 Q376 1072 413 1065 C378 1085 341 1051 328 1018Z" fill="#aed6d8" stroke="none"/>
+      <path d="M379 860 Q406 840 455 851 Q464 837 453 827 Q486 844 467 879 Q433 857 379 860Z M379 924 Q417 905 457 917 Q471 900 462 887 Q492 913 466 938 Q435 925 379 924Z M380 976 Q422 985 450 974 Q461 957 451 946 Q482 957 459 988 Q417 993 380 976Z" fill="#aed6d8" stroke="none"/>
+      <path d="M359 820 Q396 802 438 815 M379 860 Q431 856 467 879 M379 924 Q437 921 466 938 M380 976 Q422 994 459 988 M459 988 Q461 1048 405 1046" fill="none"/>
+    </g>
+
+    <!-- 08 · SUS emblem: cross and lettering are paths, not a font dependency. -->
+    <g id="marca-sus" transform="translate(659 1140) rotate(3)" fill="#206a9e" stroke="none">
+      <g id="cruz-sus">
+        <path d="M47 0H85V41H47Z M0 44H123V85H0Z M43 88H83V127H43Z"/>
+        <path d="M32 44 Q67 67 81 126" fill="none" stroke="#f5eedf" stroke-width="3"/>
+      </g>
+      <g id="letras-sus" transform="translate(139 44)">
+        <path id="letra-s-1" d="M31 2C22-2 8-1 3 7C-3 17 3 24 14 28C24 31 24 36 17 37C11 38 4 35 0 33V42C11 47 27 47 32 37C38 25 29 19 19 16C10 13 11 8 18 8C23 8 28 10 31 11Z"/>
+        <path id="letra-u" d="M39 0H50V28C50 35 53 38 59 38C65 38 68 35 68 28V0H79V29C79 41 72 46 59 46C46 46 39 41 39 29Z"/>
+        <path id="letra-s-2" d="M117 2C108-2 94-1 89 7C83 17 89 24 100 28C110 31 110 36 103 37C97 38 90 35 86 33V42C97 47 113 47 118 37C124 25 115 19 105 16C96 13 97 8 104 8C109 8 114 10 117 11Z"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- 09 · Optional paper grain overlay. Delete this group for flat fills.
+       A faint duplicate uses the existing geometry; no raster is embedded.
+       Grain does not displace or roughen the regular outer contours. -->
+  <g id="textura-papel" opacity="0.12" filter="url(#grao-papel)" pointer-events="none">
+    <use href="#mascote"/>
+  </g>
+</svg>
